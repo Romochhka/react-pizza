@@ -1,37 +1,40 @@
 import React from "react";
 
-export const PizzaBlock = ({ price, title }) => {
-  const [pizzaCount, setPizzaCount] = React.useState(0);
-
-  const addCount = () => {
-    setPizzaCount(pizzaCount + 1);
-  };
-
+const Index = ({ price, title, imageUrl, sizes, types }) => {
+  const [activeType, setActiveType] = React.useState(0);
+  const [activeSize, setActiveSize] = React.useState(0);
+  const typesPizza = ["тонкое", "традиционное"];
   return (
     <div className="pizza-block">
-      <img
-        className="pizza-block__image"
-        src="https://media.dodostatic.net/image/r:292x292/01962455dc34712a8cb6f6f6ecd2e3f6.jpg"
-        alt="Pizza"
-      />
+      <img className="pizza-block__image" src={imageUrl} alt="Pizza" />
       <h4 className="pizza-block__title">{title}</h4>
       <div className="pizza-block__selector">
         <ul>
-          <li className="active">тонкое</li>
-          <li>традиционное</li>
+          {types.map((i) => (
+            <li
+              key={i}
+              onClick={() => setActiveType(i)}
+              className={activeType === i ? "active" : ""}
+            >
+              {typesPizza[i]}{" "}
+            </li>
+          ))}
         </ul>
         <ul>
-          <li className="active">26 см.</li>
-          <li>30 см.</li>
-          <li>40 см.</li>
+          {sizes.map((size, i) => (
+            <li
+              key={i}
+              onClick={() => setActiveSize(i)}
+              className={activeSize === i ? "active" : ""}
+            >
+              {size} см
+            </li>
+          ))}
         </ul>
       </div>
       <div className="pizza-block__bottom">
         <div className="pizza-block__price">от {price} тг</div>
-        <button
-          onClick={addCount}
-          className="button button--outline button--add"
-        >
+        <button className="button button--outline button--add">
           <svg
             width="12"
             height="12"
@@ -45,9 +48,11 @@ export const PizzaBlock = ({ price, title }) => {
             />
           </svg>
           <span>Добавить</span>
-          <i>{pizzaCount}</i>
+          <i>1</i>
         </button>
       </div>
     </div>
   );
 };
+
+export default Index;
