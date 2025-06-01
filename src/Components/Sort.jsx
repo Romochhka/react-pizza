@@ -1,13 +1,21 @@
 import React from "react";
 
-export const Sort = () => {
+export const Sort = ({ value, onChangeSort }) => {
   const [onActive, setOnActive] = React.useState(false);
-  const [selected, setSelected] = React.useState(0);
-  const list = ["популярности", "цене", "алфавиту"];
-  const sortName = list[selected];
 
-  const onclickList = (i) => {
-    setSelected(i);
+  const list = [
+    { name: "популярности", sortProperty: "rating" },
+    { name: "цене", sortProperty: "price" },
+    { name: "алфавиту", sortProperty: "title" },
+  ];
+
+  const onclickList = (obj) => {
+    if (value.sortProperty === obj.sortProperty) {
+      const newOrder = value.order === "asc" ? "desc" : "asc";
+      onChangeSort({ ...value, order: newOrder });
+    } else {
+      onChangeSort({ ...obj, order: "desc" });
+    }
     setOnActive(false);
   };
 
@@ -15,6 +23,7 @@ export const Sort = () => {
     <div className="sort">
       <div className="sort__label">
         <svg
+          className={onActive ? "rotated" : ""}
           width="10"
           height="6"
           viewBox="0 0 10 6"
@@ -27,18 +36,25 @@ export const Sort = () => {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span onClick={() => setOnActive(!onActive)}>{sortName}</span>
+        <span onClick={() => setOnActive(!onActive)}>{value.name}</span>
+        <span style={{ marginLeft: "8px" }}>
+          {value.order === "asc" ? "↑" : "↓"}
+        </span>
       </div>
       {onActive && (
         <div className="sort__popup">
           <ul>
-            {list.map((name, i) => (
+            {list.map((obj, i) => (
               <li
                 key={i}
-                onClick={() => onclickList(i)}
-                className={selected === i ? "active" : ""}
+                onClick={() => onclickList(obj)}
+                className={
+                  value.sortProperty === obj.sortProperty ? "active" : ""
+                }
               >
-                {name}
+                {obj.name}{" "}
+                {value.sortProperty === obj.sortProperty &&
+                  (value.order === "asc" ? "↑" : "↓")}
               </li>
             ))}
           </ul>
